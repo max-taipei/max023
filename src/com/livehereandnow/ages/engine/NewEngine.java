@@ -284,6 +284,9 @@ public class NewEngine {
     public boolean doVersion() {
         //  System.out.println(" TODO   [A內政-亞歷山大圖書館 科技生產+1，文化生產+1，內政手牌上限+1，軍事手牌上限+1]  ");
         //getBuildingLimit()
+        System.out.println("  === ver 0.4 ===  2014-5-12, 12:32, by Max　");
+        System.out.println("    1.要處理回合數");
+        
         System.out.println("  === ver 0.3 ===  2014-5-12, 11:45, by Max　");
         System.out.println("    1.準備作交換玩家");
         System.out.println("  === ver 0.2 ===  2014-5-12, 10:05, by Max　");
@@ -306,23 +309,26 @@ public class NewEngine {
 //        field.getP1().get政府區().get(0).setTokenYellow(2);
     }
 
-//private void 執行生產(){
-//    field.getCurrentPlayer().
-//            for(int k=0;k<4;k++){
-//                
-//            }
-//    
-//}
+private void 執行生產(){
+    System.out.println("執行生產");
+    field.getP1().get文化().setPoints(field.getP1().get文化().getPoints()+field.getP1().get文化生產_當回合().getPoints());
+    field.getP1().get科技().setPoints(field.getP1().get科技().getPoints()+field.getP1().get科技生產_當回合().getPoints());
+            for(int k=0;k<4;k++){
+//             field.getP1().
+            }
+    
+}
     private void 交換玩家() {
-        System.out.println("交換");
-        System.out.println(field.getCurrentPlayer());
-        System.out.println(field.getP1());
+        System.out.println("交換玩家");
+//        System.out.println(field.getCurrentPlayer());
+//        System.out.println(field.getP1());
         if (field.getCurrentPlayer().equals(field.getP1())) {
+//            System.out.println("1to2");
             field.setCurrentPlayer(field.getP2());
         }
 //         System.out.println("交換");
 
-        if (field.getCurrentPlayer() == field.getP2()) {
+        else if (field.getCurrentPlayer() == field.getP2()) {
             field.setCurrentPlayer(field.getP1());
         }
     }
@@ -370,9 +376,9 @@ public class NewEngine {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
 //        檢測暴動();
-//        this.執行生產();
+        this.執行生產();
 //        腐敗();
-        field.getCurrentPlayer();
+//        field.getCurrentPlayer();
 //        field.setCurrentPlayer(field.getP2());
         交換玩家();
         return true;
