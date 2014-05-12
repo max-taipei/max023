@@ -8,6 +8,7 @@ package com.livehereandnow.ages.engine;
 import com.livehereandnow.ages.card.Card;
 import com.livehereandnow.ages.exception.AgesException;
 import com.livehereandnow.ages.field.Field;
+import com.livehereandnow.ages.field.Field.FieldPlayer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class NewEngine {
 
 //    private EngineCore core;
     private Field field;
+    FieldPlayer[] player = new FieldPlayer[2];
 
     public Field getField() {
         return field;
@@ -32,6 +34,8 @@ public class NewEngine {
 
     private void init() {
         field = new Field();
+        player[0] = field.getP1();
+        player[1] = field.getP2();
     }
 
     String returnStr = " return str...";
@@ -284,9 +288,13 @@ public class NewEngine {
     public boolean doVersion() {
         //  System.out.println(" TODO   [A內政-亞歷山大圖書館 科技生產+1，文化生產+1，內政手牌上限+1，軍事手牌上限+1]  ");
         //getBuildingLimit()
+
+        System.out.println("  === ver 0.5 ===  2014-5-12, 12:32, by Max　");
+        System.out.println("    1.處理回合數內的生產");
+
         System.out.println("  === ver 0.4 ===  2014-5-12, 12:32, by Max　");
         System.out.println("    1.要處理回合數");
-        
+
         System.out.println("  === ver 0.3 ===  2014-5-12, 11:45, by Max　");
         System.out.println("    1.準備作交換玩家");
         System.out.println("  === ver 0.2 ===  2014-5-12, 10:05, by Max　");
@@ -309,25 +317,32 @@ public class NewEngine {
 //        field.getP1().get政府區().get(0).setTokenYellow(2);
     }
 
-private void 執行生產(){
-    System.out.println("執行生產");
-    field.getP1().get文化().setPoints(field.getP1().get文化().getPoints()+field.getP1().get文化生產_當回合().getPoints());
-    field.getP1().get科技().setPoints(field.getP1().get科技().getPoints()+field.getP1().get科技生產_當回合().getPoints());
-            for(int k=0;k<4;k++){
-//             field.getP1().
-            }
-    
-}
+    private void 執行生產() {
+        System.out.println("執行生產");
+        int points;
+        field.getCurrentPlayer().get文化().setPoints(field.getCurrentPlayer().get文化().getPoints() + field.getCurrentPlayer().get文化生產_當回合().getPoints());
+        field.getCurrentPlayer().get科技().setPoints(field.getCurrentPlayer().get科技().getPoints() + field.getCurrentPlayer().get科技生產_當回合().getPoints());
+        for (int k = 0; k < 1; k++) {
+            field.getCurrentPlayer().get農場區().get(k).produce();
+            field.getCurrentPlayer().get礦山區().get(k).produce();
+            /*
+             points = field.getCurrentPlayer().get農場區().get(k).getTokenBlue() + field.getCurrentPlayer().get農場區().get(k).getTokenYellow();
+             field.getCurrentPlayer().get農場區().get(k).setTokenBlue(points);
+             points = field.getCurrentPlayer().get礦山區().get(k).getTokenBlue() + field.getCurrentPlayer().get礦山區().get(k).getTokenYellow();
+             field.getCurrentPlayer().get礦山區().get(k).setTokenBlue(points);
+             */
+        }
+
+    }
+
     private void 交換玩家() {
         System.out.println("交換玩家");
 //        System.out.println(field.getCurrentPlayer());
-//        System.out.println(field.getP1());
-        if (field.getCurrentPlayer().equals(field.getP1())) {
+//        System.out.println(player[0]);
+        if (field.getCurrentPlayer().equals(player[0])) {
 //            System.out.println("1to2");
             field.setCurrentPlayer(field.getP2());
-        }
-//         System.out.println("交換");
-
+        } //         System.out.println("交換");
         else if (field.getCurrentPlayer() == field.getP2()) {
             field.setCurrentPlayer(field.getP1());
         }
@@ -354,21 +369,33 @@ private void 執行生產(){
     private boolean doStart() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-        field.getP1().get步兵區().get(0).setTokenYellow(1);
-        field.getP1().get實驗室().get(0).setTokenYellow(1);
-        field.getP1().get礦山區().get(0).setTokenYellow(2);
-        field.getP1().get農場區().get(0).setTokenYellow(2);
-        field.getP1().get人力庫_黃點().setPoints(18);
-        field.getP1().get工人區_黃點().setPoints(1);
-        field.getP1().get資源庫_藍點().setPoints(18);
+        for (int k = 0; k < 2; k++) {
 
-        field.getP2().get步兵區().get(0).setTokenYellow(1);
-        field.getP2().get實驗室().get(0).setTokenYellow(1);
-        field.getP2().get礦山區().get(0).setTokenYellow(2);
-        field.getP2().get農場區().get(0).setTokenYellow(2);
-        field.getP2().get人力庫_黃點().setPoints(18);
-        field.getP2().get工人區_黃點().setPoints(1);
-        field.getP2().get資源庫_藍點().setPoints(18);
+            player[k].get步兵區().get(0).setTokenYellow(1);
+            player[k].get實驗室().get(0).setTokenYellow(1);
+            player[k].get礦山區().get(0).setTokenYellow(2);
+            player[k].get農場區().get(0).setTokenYellow(2);
+            player[k].get人力庫_黃點().setPoints(18);
+            player[k].get工人區_黃點().setPoints(1);
+            player[k].get資源庫_藍點().setPoints(18);
+        }/*
+         field.getP1().get步兵區().get(0).setTokenYellow(1);
+         field.getP1().get實驗室().get(0).setTokenYellow(1);
+         field.getP1().get礦山區().get(0).setTokenYellow(2);
+         field.getP1().get農場區().get(0).setTokenYellow(2);
+         field.getP1().get人力庫_黃點().setPoints(18);
+         field.getP1().get工人區_黃點().setPoints(1);
+         field.getP1().get資源庫_藍點().setPoints(18);
+
+         field.getP2().get步兵區().get(0).setTokenYellow(1);
+         field.getP2().get實驗室().get(0).setTokenYellow(1);
+         field.getP2().get礦山區().get(0).setTokenYellow(2);
+         field.getP2().get農場區().get(0).setTokenYellow(2);
+         field.getP2().get人力庫_黃點().setPoints(18);
+         field.getP2().get工人區_黃點().setPoints(1);
+         field.getP2().get資源庫_藍點().setPoints(18);
+         */
+
         return true;
     }
 
@@ -381,6 +408,10 @@ private void 執行生產(){
 //        field.getCurrentPlayer();
 //        field.setCurrentPlayer(field.getP2());
         交換玩家();
+        //        field.get
+//    private List<Card> ageICivilCards;
+//    ageICivilCards  = new ArrayList<>();
+
         return true;
     }
 
