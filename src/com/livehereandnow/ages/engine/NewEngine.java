@@ -221,6 +221,7 @@ public class NewEngine {
             case "p":
             case "o":
             case "out":
+
             case "play":
             case "play-card":
             case "out-card":
@@ -255,6 +256,7 @@ public class NewEngine {
             case "打":
             case "out":
             case "o":
+
             case "play":
             case "play-card":   // PUT a LEADER INTO PLAY, PLAY AN ACTION CARD 
             //
@@ -282,10 +284,12 @@ public class NewEngine {
     public boolean doVersion() {
         //  System.out.println(" TODO   [A內政-亞歷山大圖書館 科技生產+1，文化生產+1，內政手牌上限+1，軍事手牌上限+1]  ");
         //getBuildingLimit()
-        System.out.println("  === ver 0.79 ===  2014-5-12, 10:05, by Max　");
+        System.out.println("  === ver 0.3 ===  2014-5-12, 11:45, by Max　");
+        System.out.println("    1.準備作交換玩家");
+        System.out.println("  === ver 0.2 ===  2014-5-12, 10:05, by Max　");
         System.out.println("    Done 需要增加setCurrentPlayer");
         System.out.println("    1.建立騎兵區、炮兵區、飛機區、劇院區、圖書館區、競技場區");
-        System.out.println("  === ver 0.78 ===  2014-5-10, 16:47, by Max　");
+        System.out.println("  === ver 0.1 ===  2014-5-10, 16:47, by Max　");
         System.out.println("    1. 建立遊戲引擎的變量，能夠運作的地方");
 
         return true;
@@ -301,6 +305,7 @@ public class NewEngine {
 
 //        field.getP1().get政府區().get(0).setTokenYellow(2);
     }
+
 //private void 執行生產(){
 //    field.getCurrentPlayer().
 //            for(int k=0;k<4;k++){
@@ -308,12 +313,24 @@ public class NewEngine {
 //            }
 //    
 //}
+    private void 交換玩家() {
+        System.out.println("交換");
+        System.out.println(field.getCurrentPlayer());
+        System.out.println(field.getP1());
+        if (field.getCurrentPlayer().equals(field.getP1())) {
+            field.setCurrentPlayer(field.getP2());
+        }
+//         System.out.println("交換");
+
+        if (field.getCurrentPlayer() == field.getP2()) {
+            field.setCurrentPlayer(field.getP1());
+        }
+    }
 
     private boolean doPlayCard(int val) {
 
-//        field.getCardRow().
-        //field.getCardRow().get(val);
         System.out.println("...play-card ...");
+//        if(field.getCurrentPlayer().get手牌內政牌區().wait(val, val))
         return true;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -351,10 +368,13 @@ public class NewEngine {
 
     private boolean doChangeTurn() {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//        this.執行生產();
-        field.getCurrentPlayer();
-        field.setCurrentPlayer(field.getP2());
 
+//        檢測暴動();
+//        this.執行生產();
+//        腐敗();
+        field.getCurrentPlayer();
+//        field.setCurrentPlayer(field.getP2());
+        交換玩家();
         return true;
     }
 
