@@ -129,42 +129,6 @@ public class NewEngine {
 
     }
 
-//    public EngineCore getCore() {
-//        return core;
-//    }
-//    public Player getCurrentPlayer() {
-//        return core.get當前玩家();
-//    }
-//    public String doProtocol(String cmd) throws IOException, AgesException {
-////        core.getRoundNum();
-//        switch (cmd) {
-//            case "history":
-//                return core.getHistory();
-//            default:
-//                return core.getCardRowInfo();
-//        }
-//
-////        return core.NOCARD.toString();
-//    }
-//    public String doUserCmd(String user, String cmd) throws IOException, AgesException {
-//
-//        if (user.equalsIgnoreCase("admin")) {
-//            parser(cmd);
-//            return core.getFeedback();
-//        }
-//
-//        if (core.get當前玩家().getName().equalsIgnoreCase(user)) {
-//            if (parser(cmd)) {
-//                return core.getFeedback();
-//
-//            } else {
-//                return "unknown command, " + cmd;
-//            }
-//
-//        } else {
-//            return "   " + user + ", not your turn!";
-//        }
-//    }
     public boolean doCmd(String keyword) throws IOException, AgesException {
         switch (keyword) {
 //           case "new-game"://v0.52
@@ -229,7 +193,7 @@ public class NewEngine {
             case "play":
             case "play-card":
             case "out-card":
-                return doPlayCard(val);
+                return 出牌(val);
             case "oo":
 //                return core.doPlayCard革命(val);
             case "拿"://在我的環境NetBeans無法執行，但是在DOS可以
@@ -265,7 +229,7 @@ public class NewEngine {
             case "play-card":   // PUT a LEADER INTO PLAY, PLAY AN ACTION CARD 
             //
             case "out-card":
-//                return core.doPlayCard(p1, p2);
+                return NewEngine.this.出牌(p1, p2);
 
             default:
                 System.out.println("Unknown keyword, " + keyword);
@@ -289,6 +253,10 @@ public class NewEngine {
         //  System.out.println(" TODO   [A內政-亞歷山大圖書館 科技生產+1，文化生產+1，內政手牌上限+1，軍事手牌上限+1]  ");
         //getBuildingLimit()
 
+        System.out.println("  === ver 0.6 ===  2014-5-13, 12:32, by Max　");
+        System.out.println("    1.新增方法 打牌");
+        System.out.println("    2.新增方法 拿牌，奇蹟牌完成，領袖牌完成一半");
+        
         System.out.println("  === ver 0.5 ===  2014-5-12, 12:32, by Max　");
         System.out.println("    1.處理回合數內的生產");
 
@@ -325,43 +293,237 @@ public class NewEngine {
         for (int k = 0; k < 1; k++) {
             field.getCurrentPlayer().get農場區().get(k).produce();
             field.getCurrentPlayer().get礦山區().get(k).produce();
-            /*
-             points = field.getCurrentPlayer().get農場區().get(k).getTokenBlue() + field.getCurrentPlayer().get農場區().get(k).getTokenYellow();
-             field.getCurrentPlayer().get農場區().get(k).setTokenBlue(points);
-             points = field.getCurrentPlayer().get礦山區().get(k).getTokenBlue() + field.getCurrentPlayer().get礦山區().get(k).getTokenYellow();
-             field.getCurrentPlayer().get礦山區().get(k).setTokenBlue(points);
-             */
         }
-
     }
 
     private void 交換玩家() {
         System.out.println("交換玩家");
-//        System.out.println(field.getCurrentPlayer());
-//        System.out.println(player[0]);
         if (field.getCurrentPlayer().equals(player[0])) {
-//            System.out.println("1to2");
             field.setCurrentPlayer(field.getP2());
-        } //         System.out.println("交換");
-        else if (field.getCurrentPlayer() == field.getP2()) {
+        } else if (field.getCurrentPlayer() == field.getP2()) {
             field.setCurrentPlayer(field.getP1());
         }
     }
+//    移除卡牌列前三張牌();
+//        移動卡牌列();
+//        補充新牌();
 
-    private boolean doPlayCard(int val) {
+    private void 移除卡牌列前三張牌() {
+        field.getCardRow().remove(0);
+        field.getCardRow().remove(1);
+        field.getCardRow().remove(2);
+    }
+
+    private void 移動卡牌列() {
+        Card card;//= field.getCardRow().get(0);//實例化一張牌
+        for (int k = 0; k < 13; k++) {//檢視卡牌列
+            if (field.getCardRow().get(k).getId() == 1000) {//如果有空牌
+                for (int x = k + 1; x < 13; x++) {//找他後面
+                    if (field.getCardRow().get(x).getId() != 1000) {//不是空牌
+                        //放到card內
+//                        card=field.getCardRow().get(k);
+                        //移除卡牌列上第x張
+                        //把card放在第k張
+                        //移除card內的牌
+                    }
+                }
+            }
+        }
+    }
+//        Card card = field.getCardRow().get(val);//宣告 card，並將卡牌列裡的指定編號的卡牌指定到這個card變量裡
+//            field.getCurrentPlayer().get手牌內政牌區().add(card);//當前玩家的手牌加入上一行的card
+//            field.getCardRow().remove(val);//從卡牌列拿掉剛剛那張card
+//            field.getCardRow().add(val, field.getAllCards().get(0));//在卡牌列同樣的位子，補上一張空卡
+
+    private void 補充新牌() {
+
+    }
+
+    private boolean 出牌(int val) {
 
         System.out.println("...play-card ...");
 //        if(field.getCurrentPlayer().get手牌內政牌區().wait(val, val))
+        System.out.println("這張是" + field.getCurrentPlayer().get手牌內政牌區().get(val).getTag());
+        switch (field.getCurrentPlayer().get手牌內政牌區().get(val).getTag()) {
+            case "行動":
+                System.out.println("我是行動牌");
+                break;
+            case "領袖":
+                System.out.println("我是領袖牌");
+                break;
+            case "奇蹟":
+                System.out.println("這裡不該有奇蹟牌");
+                break;
+            //↓灰色區塊
+            case "農場":
+                System.out.println("我是農場牌");
+//                field.getCurrentPlayer().get步兵區().get(0).
+                break;
+            case "礦山":
+                System.out.println("我是礦山牌");
+                break;
+            case "實驗室":
+                System.out.println("我是實驗室牌");
+                break;
+            case "神廟":
+                System.out.println("我是神廟牌");
+                break;
+            case "競技場":
+                System.out.println("我是競技場牌");
+                break;
+            case "圖書館":
+                System.out.println("我是圖書館牌");
+                break;
+            case "劇院":
+                System.out.println("我是劇院牌");
+                break;
+            //↑程式建築物灰色區塊
+            case "政府":
+                System.out.println("我是政府牌");
+                break;
+            //↓特殊科技藍色區塊
+            case "軍事":
+                System.out.println("我是特殊科技-軍事牌");
+                break;
+            case "內政":
+                System.out.println("我是特殊科技-內政牌");
+                break;
+            case "殖民":
+                System.out.println("我是特殊科技-殖民牌");
+                break;
+            case "建築":
+                System.out.println("我是特殊科技-建築牌");
+                break;
+            //↑特殊科技藍色區塊
+            //↓軍事科技紅色區塊
+            case "步兵":
+                System.out.println("我是步兵牌");
+                break;
+            case "騎兵":
+                System.out.println("我是騎兵牌");
+                break;
+            case "炮兵":
+                System.out.println("我是炮兵牌");
+                break;
+            case "飛機":
+                System.out.println("我是飛機牌");
+                break;
+            //↑軍事科技紅色區塊
+            default:
+//                System.out.println("Unknown keyword, " + keyword);
+                return false;
+        }
+
         return true;
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     private boolean doTakeCard(int val) {
         Card card = field.getCardRow().get(val);//宣告 card，並將卡牌列裡的指定編號的卡牌指定到這個card變量裡
-        field.getCurrentPlayer().get手牌內政牌區().add(card);//當前玩家的手牌加入上一行的card
-        field.getCardRow().remove(val);//從卡牌列拿掉剛剛那張card
-        field.getCardRow().add(val, field.getAllCards().get(0));//在卡牌列同樣的位子，補上一張空卡
+        System.out.println("拿牌中...拿取" + card.getName());
 
+        switch (card.getTag()) {
+            case "行動":
+                System.out.println("我是行動牌");
+                break;
+
+            case "領袖":
+                System.out.println("我是領袖牌");
+                if (field.getCurrentPlayer().get領袖區().get(card.getAge()).getId() == 1000) {
+                    System.out.println("這是空的可以擺置該時代領袖牌");
+//                    field.getCurrentPlayer().get領袖區().remove(card.getAge());
+
+//                    #######################################################################
+//                    romove吃不到card.getAge()
+                    System.out.println(card.getAge());
+                    field.getCurrentPlayer().get領袖區().remove(0);
+
+                    System.out.println(field.getCurrentPlayer().get領袖區().get(0));
+                    field.getCurrentPlayer().get領袖區().add(card.getAge(), card);
+                    System.out.println("時代" + card.getAge() + "拿了" + card.getName());
+                    field.getCurrentPlayer().get手牌內政牌區().add(card);//當前玩家的手牌加入上一行的card
+                    field.getCardRow().remove(val);//從卡牌列拿掉剛剛那張card
+                    field.getCardRow().add(val, field.getAllCards().get(0));//在卡牌列同樣的位子，補上一張空卡
+                } else {
+                    System.out.println("你已經拿過該時代領袖牌");
+                }
+                //檢測該牌的時代的領袖區是不是為空
+//                System.out.println(field.getCurrentPlayer().get領袖區().get(0));
+                break;
+            case "奇蹟":
+                System.out.println("我是奇蹟牌");
+                if (field.getCurrentPlayer().get建造中的奇蹟區().size() == 0) {
+                    field.getCurrentPlayer().get建造中的奇蹟區().add(card);//當前玩家的手牌加入上一行的card
+                    field.getCardRow().remove(val);//從卡牌列拿掉剛剛那張card
+                    field.getCardRow().add(val, field.getAllCards().get(0));//在卡牌列同樣的位子，補上一張空卡
+                } else {
+                    System.out.println("你有未建造完成的奇蹟");
+                }
+                break;
+            //↓灰色區塊
+            case "農場":
+                System.out.println("我是農場牌");
+                break;
+            case "礦山":
+                System.out.println("我是礦山牌");
+                break;
+            case "實驗室":
+                System.out.println("我是實驗室牌");
+                break;
+            case "神廟":
+                System.out.println("我是神廟牌");
+                break;
+            case "競技場":
+                System.out.println("我是競技場牌");
+                break;
+            case "圖書館":
+                System.out.println("我是圖書館牌");
+                break;
+            case "劇院":
+                System.out.println("我是劇院牌");
+                break;
+            //↑程式建築物灰色區塊
+            case "政府":
+                System.out.println("我是政府牌");
+                break;
+            //↓特殊科技藍色區塊
+            case "軍事":
+                System.out.println("我是特殊科技-軍事牌");
+                break;
+            case "內政":
+                System.out.println("我是特殊科技-內政牌");
+                break;
+            case "殖民":
+                System.out.println("我是特殊科技-殖民牌");
+                break;
+            case "建築":
+                System.out.println("我是特殊科技-建築牌");
+                break;
+            //↑特殊科技藍色區塊
+            //↓軍事科技紅色區塊
+            case "步兵":
+                System.out.println("我是步兵牌");
+                break;
+            case "騎兵":
+                System.out.println("我是騎兵牌");
+                break;
+            case "炮兵":
+                System.out.println("我是炮兵牌");
+                break;
+            case "飛機":
+                System.out.println("我是飛機牌");
+                break;
+            default:
+//                System.out.println("Unknown keyword, " + keyword);
+                return false;
+        }
+
+//        Card card = field.getCardRow().get(val);//宣告 card，並將卡牌列裡的指定編號的卡牌指定到這個card變量裡
+//        if (!card.getTag().equals("奇蹟")) {
+//
+//            field.getCurrentPlayer().get手牌內政牌區().add(card);//當前玩家的手牌加入上一行的card
+//            field.getCardRow().remove(val);//從卡牌列拿掉剛剛那張card
+//            field.getCardRow().add(val, field.getAllCards().get(0));//在卡牌列同樣的位子，補上一張空卡
+//        }
 //        field.
         return true;
     }
@@ -378,24 +540,13 @@ public class NewEngine {
             player[k].get人力庫_黃點().setPoints(18);
             player[k].get工人區_黃點().setPoints(1);
             player[k].get資源庫_藍點().setPoints(18);
-        }/*
-         field.getP1().get步兵區().get(0).setTokenYellow(1);
-         field.getP1().get實驗室().get(0).setTokenYellow(1);
-         field.getP1().get礦山區().get(0).setTokenYellow(2);
-         field.getP1().get農場區().get(0).setTokenYellow(2);
-         field.getP1().get人力庫_黃點().setPoints(18);
-         field.getP1().get工人區_黃點().setPoints(1);
-         field.getP1().get資源庫_藍點().setPoints(18);
 
-         field.getP2().get步兵區().get(0).setTokenYellow(1);
-         field.getP2().get實驗室().get(0).setTokenYellow(1);
-         field.getP2().get礦山區().get(0).setTokenYellow(2);
-         field.getP2().get農場區().get(0).setTokenYellow(2);
-         field.getP2().get人力庫_黃點().setPoints(18);
-         field.getP2().get工人區_黃點().setPoints(1);
-         field.getP2().get資源庫_藍點().setPoints(18);
-         */
-
+            player[k].get領袖區().add(0, field.getAllCards().get(0));
+            player[k].get領袖區().add(1, field.getAllCards().get(0));
+            player[k].get領袖區().add(2, field.getAllCards().get(0));
+            player[k].get領袖區().add(3, field.getAllCards().get(0)); //                .getAllCards().get(0));
+        }
+        System.out.println(player[1].get領袖區());
         return true;
     }
 
@@ -403,16 +554,23 @@ public class NewEngine {
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
 //        檢測暴動();
-        this.執行生產();
+        執行生產();
 //        腐敗();
-//        field.getCurrentPlayer();
-//        field.setCurrentPlayer(field.getP2());
         交換玩家();
+//        移除卡牌列前三張牌();
+//        移動卡牌列();
+//        補充新牌();
         //        field.get
 //    private List<Card> ageICivilCards;
 //    ageICivilCards  = new ArrayList<>();
 
         return true;
+    }
+
+    private boolean 出牌(int p1, int p2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        
+//        field.getCurrentPlayer().get手牌內政牌區()
     }
 
 }
